@@ -2,30 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopService : MonoBehaviour
+public class ShopService
 {
-    [SerializeField] private ItemListScriptableObject itemList;
-    [SerializeField] private ShopView shopView;
+    private ItemListScriptableObject itemList;
+    private ShopView shopView;
     private ShopModel shopModel;
     private ShopController shopController;
 
-    private void OnEnable()
+    public ShopService(ItemListScriptableObject _itemsList, ShopView _shopView)
     {
+        this.itemList = _itemsList;
+        this.shopView = _shopView;
+        shopModel = new ShopModel();
+        shopController = new ShopController(shopModel, shopView);
+        AddItems(itemList.GetItemData());
+
         EventService.Instance.OnBuyItemEvent.AddListener(RemoveSelectedItems);
         EventService.Instance.OnSellItemEvent.AddListener(AddItems);
     }
 
-    private void OnDisable()
+    ~ShopService()
     {
         EventService.Instance.OnBuyItemEvent.RemoveListener(RemoveSelectedItems);
         EventService.Instance.OnBuyItemEvent.RemoveListener(AddItems);
-    }
-
-    private void Start()
-    {
-        shopModel = new ShopModel();
-        shopController = new ShopController(shopModel, shopView);
-        AddItems(itemList.GetItemData());
     }
 
     private void AddItems(List<ItemScriptableObject> _itemData)

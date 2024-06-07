@@ -1487,7 +1487,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21a18fdd75633f4ab92dfee35ac2401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryService: {fileID: 545302173}
 --- !u!1 &398029056
 GameObject:
   m_ObjectHideFlags: 0
@@ -1499,7 +1498,6 @@ GameObject:
   - component: {fileID: 398029057}
   - component: {fileID: 398029059}
   - component: {fileID: 398029058}
-  - component: {fileID: 398029060}
   m_Layer: 5
   m_Name: Shop
   m_TagString: Untagged
@@ -1570,20 +1568,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398029056}
   m_CullTransparentMesh: 1
---- !u!114 &398029060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398029056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77d3239092e0d8c4b99d4220de42bad1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemList: {fileID: 11400000, guid: 50970b369c9f4a949915fd9e994ae322, type: 2}
-  shopView: {fileID: 420893331}
 --- !u!1 &414467188
 GameObject:
   m_ObjectHideFlags: 0
@@ -2002,6 +1986,54 @@ MonoBehaviour:
   consumablesButton: {fileID: 1217095369}
   treasureButton: {fileID: 1012329617}
   weaponsButton: {fileID: 1931477987}
+--- !u!1 &457300385
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 457300387}
+  - component: {fileID: 457300386}
+  m_Layer: 0
+  m_Name: GameService
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &457300386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457300385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edda3a20dbd624946afc6c7ea129b2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryItemsData: {fileID: 11400000, guid: e81da9e12a01e8e4ea15f13d084acf3b, type: 2}
+  inventoryView: {fileID: 988913195}
+  shopItemList: {fileID: 11400000, guid: 50970b369c9f4a949915fd9e994ae322, type: 2}
+  shopView: {fileID: 420893331}
+--- !u!4 &457300387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457300385}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &545302169
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,7 +2045,6 @@ GameObject:
   - component: {fileID: 545302170}
   - component: {fileID: 545302172}
   - component: {fileID: 545302171}
-  - component: {fileID: 545302173}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -2081,20 +2112,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 545302169}
   m_CullTransparentMesh: 1
---- !u!114 &545302173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 545302169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecf383aaf78b929439e29ef1bc0dd4db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemsData: {fileID: 11400000, guid: e81da9e12a01e8e4ea15f13d084acf3b, type: 2}
-  inventoryView: {fileID: 988913195}
 --- !u!1 &561710216
 GameObject:
   m_ObjectHideFlags: 0
@@ -6345,3 +6362,4 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 1717194040}
   - {fileID: 272348228}
+  - {fileID: 457300387}

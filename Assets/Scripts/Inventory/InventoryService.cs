@@ -2,49 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryService : MonoBehaviour
+public class InventoryService
 {
-    public static InventoryService Instance { get; private set; }
-
-    [SerializeField] private ItemListScriptableObject itemsData;
-    [SerializeField] private InventoryView inventoryView;
+    private ItemListScriptableObject itemsData;
+    private InventoryView inventoryView;
     private InventoryController inventoryController;
     private InventoryModel inventoryModel;
 
-    private void OnEnable()
+    public InventoryService(ItemListScriptableObject _itemsData, InventoryView _inventoryView)
     {
-        EventService.Instance.OnSellItemEvent.AddListener(RemoveSelectedItem);
-        EventService.Instance.OnBuyItemEvent.AddListener(AddItems);
-    }
-
-    private void OnDisable()
-    {
-        EventService.Instance.OnSellItemEvent.AddListener(RemoveSelectedItem);
-        EventService.Instance.OnBuyItemEvent.AddListener(AddItems);
-    }
-
-    private void Awake()
-    {
-        if(Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
+        this.itemsData = _itemsData;
+        this.inventoryView = _inventoryView;
         inventoryModel = new InventoryModel();
         inventoryController = new InventoryController(inventoryModel, inventoryView);
+        EventService.Instance.OnSellItemEvent.AddListener(RemoveSelectedItem);
+        EventService.Instance.OnBuyItemEvent.AddListener(AddItems);
+    }
+    ~InventoryService()
+    {
+        EventService.Instance.OnSellItemEvent.AddListener(RemoveSelectedItem);
+        EventService.Instance.OnBuyItemEvent.AddListener(AddItems);
     }
 
     public void AddItems()
     {
         int quantity = Random.Range(1, 5);
-        inventoryController.AddItems(itemsData.GetRandomItemData(),quantity);
+        inventoryController.AddItems(itemsData.GetRandomItemData(), quantity);
     }
 
     public void AddItems(ItemScriptableObject _itemData, int _quanity)

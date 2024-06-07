@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class LootButton : MonoBehaviour
 {
-    [SerializeField] private InventoryService inventoryService;
     private Button button;
     private void Start()
     {
@@ -24,9 +23,9 @@ public class LootButton : MonoBehaviour
 
     private void AddItems()
     {
-        if (inventoryService != null)
+        if (GameService.Instance.inventoryService != null)
         {
-            inventoryService.AddItems();
+            GameService.Instance.inventoryService.AddItems();
         }
     }
 

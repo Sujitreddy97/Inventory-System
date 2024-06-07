@@ -21,7 +21,9 @@ public class InventoryModel
 
     public void AddItem(ItemScriptableObject _itemdata, int _quantity)
     {
-        if (!CanAddItem(_itemdata.weight) || currentWeight >= maxWeight)
+        int totalWeightToAdd = _itemdata.weight * _quantity;
+
+        if (!CanAddItem(totalWeightToAdd) || currentWeight + totalWeightToAdd > maxWeight)
         {
             EventService.Instance.OnWeightFullEvent.InvokeEvent();
             return;
@@ -33,12 +35,12 @@ public class InventoryModel
         }
         else
         {
-            items[_itemdata] = 1;
+            items[_itemdata] = _quantity; 
         }
-        currentWeight += _itemdata.weight;
-        //coins-= _itemdata.buyingPrice;
-        EventService.Instance.OnAddItemEvent.InvokeEvent();//update weight(increase)
+        currentWeight += totalWeightToAdd;  
+        EventService.Instance.OnAddItemEvent.InvokeEvent();
     }
+
 
     public void RemoveItem(ItemScriptableObject itemData, int _quantity)
     {

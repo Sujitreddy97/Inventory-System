@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DiscriptionController : MonoBehaviour
+public class DiscriptionController: MonoBehaviour
 {
     public static DiscriptionController Instance { get; private set; }
 
@@ -85,10 +85,6 @@ public class DiscriptionController : MonoBehaviour
         ToggleSellAndBuyButtons(_fromInventory);
     }
 
-    public int GetQuantity()
-    {
-        return quantity;
-    }
 
     private void IncreaseQuantity()
     {
@@ -122,11 +118,6 @@ public class DiscriptionController : MonoBehaviour
         buyButton.gameObject.SetActive(!fromInventory);
     }
 
-    public void ShowDescription()
-    {
-        descriptionPanel.SetActive(true);
-    }
-
     public void HideDescription()
     {
         descriptionPanel.SetActive(false);
@@ -143,11 +134,10 @@ public class DiscriptionController : MonoBehaviour
         int totalCost = currentItem.buyingPrice * quantity;
         int totalWeight = currentItem.weight * quantity;
 
-        if (InventoryService.Instance.GetInventoryController().CanAfford(totalCost))
+        if (GameService.Instance.inventoryService.GetInventoryController().CanAfford(totalCost))
         {
-            if (InventoryService.Instance.GetInventoryController().CanCarryWeight(totalWeight))
+            if (GameService.Instance.inventoryService.GetInventoryController().CanCarryWeight(totalWeight))
             {
-                //EventService.Instance.OnBuyReduceCoinsEvent.InvokeEvent(totalCost);
                 EventService.Instance.OnBuyItemEvent.InvokeEvent(currentItem, quantity);
                 HideDescription();
             }

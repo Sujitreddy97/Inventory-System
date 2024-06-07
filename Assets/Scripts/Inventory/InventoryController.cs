@@ -6,16 +6,6 @@ public class InventoryController
     private InventoryModel inventoryModel;
     private InventoryView inventoryView;
 
-/*    private void OnEnable()
-    {
-        EventService.Instance.OnBuyReduceCoins.AddListener(ReduceCoins);
-    }
-
-    private void OnDisable()
-    {
-        EventService.Instance.OnBuyReduceCoins.RemoveListener(ReduceCoins);
-    }*/
-
     public InventoryController(InventoryModel _inventoryModel, InventoryView _inventoryView)
     {
         this.inventoryModel = _inventoryModel;
