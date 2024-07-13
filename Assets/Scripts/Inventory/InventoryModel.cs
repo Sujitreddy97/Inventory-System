@@ -19,26 +19,17 @@ public class InventoryModel
         this.inventoryController = inventoryController;
     }
 
-    public void AddItem(ItemScriptableObject _itemdata, int _quantity)
+    public void AddItem(ItemScriptableObject _itemdata, int _quantity, int _totalWeightToAdd)
     {
-        int totalWeightToAdd = _itemdata.weight * _quantity;
-
-        if (!CanAddItem(totalWeightToAdd) || currentWeight + totalWeightToAdd > maxWeight)
-        {
-            EventService.Instance.OnWeightFullEvent.InvokeEvent();
-            return;
-        }
-
         if (items.ContainsKey(_itemdata))
         {
             items[_itemdata] += _quantity;
         }
         else
         {
-            items[_itemdata] = _quantity; 
+            items[_itemdata] = _quantity;
         }
-        currentWeight += totalWeightToAdd;  
-        EventService.Instance.OnAddItemEvent.InvokeEvent();
+        currentWeight += _totalWeightToAdd;
     }
 
 
@@ -55,7 +46,6 @@ public class InventoryModel
 
             currentWeight -= itemData.weight * _quantity;
             coins += itemData.sellingPrice * _quantity;
-            EventService.Instance.OnRemoveItemEvent.InvokeEvent();//update weight(decrease)
         }
     }
 

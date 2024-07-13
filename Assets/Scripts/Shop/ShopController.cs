@@ -16,7 +16,7 @@ public class ShopController
     public void AddItems(ItemScriptableObject _itemData, int _quantity)
     {
         shopModel.AddItem(_itemData, _quantity);
-        shopView.AddItemToPanel(_itemData);
+        AddItemToShopView(_itemData);
     }
 
     public void RemoveItems(ItemScriptableObject _itemData, int _quantity)
@@ -25,8 +25,27 @@ public class ShopController
         shopView.RemoveItemFromPanel(_itemData);
     }
 
-    public ShopModel GetShopModel()
+    public int GetItemQuantity(ItemScriptableObject _itemData)
     {
-        return shopModel;
+        return shopModel.GetItemQuantity(_itemData);
+    }
+
+    private void AddItemToShopView(ItemScriptableObject _itemData)
+    {
+        int quantity = GetItemQuantity(_itemData);
+
+        if (quantity > 0 && shopView.HasItemControllerKey(_itemData))
+        {
+            shopView.UpdateItemInPanel(_itemData, quantity);
+        }
+        else
+        {
+            shopView.AddItemToPanel(_itemData, quantity);
+        }
+    }
+
+    private void RemoveItemFromShopView(ItemScriptableObject _itemData)
+    {
+        shopView.RemoveItemFromPanel(_itemData);
     }
 }

@@ -16,12 +16,11 @@ public class ShopService
         shopModel = new ShopModel();
         shopController = new ShopController(shopModel, shopView);
         AddItems(itemList.GetItemData());
-
         EventService.Instance.OnBuyItemEvent.AddListener(RemoveSelectedItems);
         EventService.Instance.OnSellItemEvent.AddListener(AddItems);
     }
 
-    ~ShopService()
+    public void OnDisable()
     {
         EventService.Instance.OnBuyItemEvent.RemoveListener(RemoveSelectedItems);
         EventService.Instance.OnBuyItemEvent.RemoveListener(AddItems);

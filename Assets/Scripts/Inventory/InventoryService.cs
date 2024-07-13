@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InventoryService
@@ -18,7 +19,8 @@ public class InventoryService
         EventService.Instance.OnSellItemEvent.AddListener(RemoveSelectedItem);
         EventService.Instance.OnBuyItemEvent.AddListener(AddItems);
     }
-    ~InventoryService()
+
+    public void OnDisable()
     {
         EventService.Instance.OnSellItemEvent.AddListener(RemoveSelectedItem);
         EventService.Instance.OnBuyItemEvent.AddListener(AddItems);

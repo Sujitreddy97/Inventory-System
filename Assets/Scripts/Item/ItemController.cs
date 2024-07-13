@@ -14,31 +14,16 @@ public class ItemController : MonoBehaviour
     [TextArea]
     private string description;
 
-    private Button button;
-    private Image itemImage;
-    private TextMeshProUGUI quantityText;
+    [SerializeField] private Button button;
+    [SerializeField] private Image itemImage;
+    [SerializeField] private TextMeshProUGUI quantityText;
     private int quantity = 0;
     private bool isFromInventory;
 
-    private void Awake()
-    {
-        button = GetComponent<Button>();
-        if (button == null)
-        {
-            Debug.LogError("ItemController: Button component not found!");
-        }
-
-        itemImage = transform.Find("ItemImage").GetComponent<Image>();
-        quantityText = transform.Find("Quantity").GetComponent<TextMeshProUGUI>();
-
-        if (quantityText != null)
-        {
-            quantityText.text = quantity.ToString();
-        }
-    }
-
+ 
     private void Start()
     {
+        quantityText.text = quantity.ToString();
         button.onClick.AddListener(ShowDiscription);
     }
 
@@ -71,6 +56,7 @@ public class ItemController : MonoBehaviour
 
     private void ShowDiscription()
     {
+        DiscriptionController.Instance.ShowDiscriptionPanel();
         DiscriptionController.Instance.SetDescriptionData(itemData,sprite, weight, quantity, buyingPrice, sellingPrice, description, isFromInventory);
     }
 }

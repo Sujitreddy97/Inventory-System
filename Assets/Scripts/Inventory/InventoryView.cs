@@ -12,7 +12,7 @@ public class InventoryView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI inventoryWeight;
     [SerializeField] private TextMeshProUGUI coinsText;
     [SerializeField] private Button lootButton;
-    private Dictionary<ItemScriptableObject, ItemController> itemControllers = new Dictionary<ItemScriptableObject, ItemController>();
+    private Dictionary<ItemScriptableObject, ItemController> items = new Dictionary<ItemScriptableObject, ItemController>();
 
     private void OnEnable()
     {
@@ -38,54 +38,51 @@ public class InventoryView : MonoBehaviour
         this.inventoryController = inventoryController;
     }
 
-    public void AddItemToPanel(ItemScriptableObject _itemData)
+    public void AddItemToPanel(ItemScriptableObject _itemData, int _quantity)
     {
-        if (itemControllers.ContainsKey(_itemData))
-        {
-            // Update the existing item's quantity
-            ItemController itemController = itemControllers[_itemData];
-            int quantity = inventoryController.GetInventoryModel().GetItemQuantity(_itemData);
-            itemController.SetItemQuantity(quantity);
-        }
-        else
-        {
-            // Create a new item button
-            GameObject buttonObject = Instantiate(itemButtonPrefab, inventoryGrid);
-            ItemController itemController = buttonObject.GetComponent<ItemController>();
 
-            if (itemController != null)
-            {
-                itemController.SetItemData(_itemData, true);
-                itemController.SetItemQuantity(inventoryController.GetInventoryModel().GetItemQuantity(_itemData));
-                itemControllers[_itemData] = itemController;
-            }
+        // Create a new item button
+        GameObject buttonObject = Instantiate(itemButtonPrefab, inventoryGrid);
+        ItemController itemController = buttonObject.GetComponent<ItemController>();
+
+        if (itemController != null)
+        {
+            itemController.SetItemData(_itemData, true);
+            itemController.SetItemQuantity(_quantity);
+            items[_itemData] = itemController;
         }
+
     }
 
     public void RemoveItemFromPanel(ItemScriptableObject _itemData)
     {
-        if (itemControllers.ContainsKey(_itemData))
+        if (items.TryGetValue(_itemData, out ItemController itemController))
         {
-            ItemController itemController = itemControllers[_itemData];
-            int quantity = inventoryController.GetInventoryModel().GetItemQuantity(_itemData);
-            itemController.SetItemQuantity(quantity);
-
-            if (quantity == 0)
-            {
-                itemControllers.Remove(_itemData);
-                Destroy(itemController.gameObject);
-            }
+            Destroy(itemController.gameObject);
+            items.Remove(_itemData);
         }
-        
+    }
+
+    public void UpdateItemInPanel(ItemScriptableObject _itemData, int _quantity)
+    {
+        if (items.TryGetValue(_itemData, out ItemController itemController))
+        {
+            itemController.SetItemQuantity(_quantity);
+        }
+    }
+
+    public bool HasItemControllerKey(ItemScriptableObject _itemData)
+    {
+        return items.ContainsKey(_itemData);
     }
 
     private void UpdateInventoryWeightDisplay()
     {
-        inventoryWeight.text = $"{"WEIGHT: "}{inventoryController.GetCurrentWeight()}/{inventoryController.GetMaxWeight()}";
+        inventoryWeight.text = $"{"WEIGHT: "}{inventoryController.GetCurrentWeight()}";
     }
 
     public void UpdateCoinsDisplay()
     {
-        coinsText.text = $"{"COINS: "}{ inventoryController.GetCoins()}";
+        coinsText.text = $"{"COINS: "}{inventoryController.GetCoins()}";
     }
 }

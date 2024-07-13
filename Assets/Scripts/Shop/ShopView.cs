@@ -13,13 +13,13 @@ public class ShopView : MonoBehaviour
     [SerializeField] private Button consumablesButton;
     [SerializeField] private Button treasureButton;
     [SerializeField] private Button weaponsButton;
-    private Dictionary<ItemScriptableObject, ItemController> itemControllers = new Dictionary<ItemScriptableObject, ItemController>();
+    private Dictionary<ItemScriptableObject, ItemController> items = new Dictionary<ItemScriptableObject, ItemController>();
     private Dictionary<ItemScriptableObject, GameObject> itemButtons = new Dictionary<ItemScriptableObject, GameObject>();
 
     private void Start()
     {
         allItemsButton.onClick.AddListener(() => FilterItems(null));
-        materialsButton.onClick.AddListener(() =>FilterItems(ItemsType.Materials));
+        materialsButton.onClick.AddListener(() => FilterItems(ItemsType.Materials));
         consumablesButton.onClick.AddListener(() => FilterItems(ItemsType.Consumables));
         treasureButton.onClick.AddListener(() => FilterItems(ItemsType.Treasure));
         weaponsButton.onClick.AddListener(() => FilterItems(ItemsType.Weapons));
@@ -31,43 +31,42 @@ public class ShopView : MonoBehaviour
     }
 
 
-    public void AddItemToPanel(ItemScriptableObject _itemData)
+    public void AddItemToPanel(ItemScriptableObject _itemData, int _quantity)
     {
-        if(itemControllers.ContainsKey(_itemData))
-        {
-            ItemController itemController = itemControllers[_itemData];
-            int qunantity = shopController.GetShopModel().GetItemQuantity(_itemData);
-            itemController.SetItemQuantity(qunantity);
-        }
-        else
-        {
-            GameObject buttonObject = Instantiate(itemButtonPrefab, inventoryGrid);
-            ItemController itemController = buttonObject.GetComponent<ItemController>();
 
-            if (itemController != null)
-            {
-                itemController.SetItemData(_itemData, false);
-                itemController.SetItemQuantity(shopController.GetShopModel().GetItemQuantity(_itemData));
-                itemControllers[_itemData] = itemController;
-                itemButtons[_itemData] = buttonObject;
-            }
+        GameObject buttonObject = Instantiate(itemButtonPrefab, inventoryGrid);
+        ItemController itemController = buttonObject.GetComponent<ItemController>();
+
+        if (itemController != null)
+        {
+            itemController.SetItemData(_itemData, false);
+            itemController.SetItemQuantity(_quantity);
+            items[_itemData] = itemController;
+            itemButtons[_itemData] = buttonObject;
         }
+
     }
 
     public void RemoveItemFromPanel(ItemScriptableObject _itemData)
     {
-        if(itemControllers.ContainsKey(_itemData))
+        if (items.TryGetValue(_itemData, out ItemController itemController))
         {
-            ItemController itemController = itemControllers[_itemData];
-            int quantity = shopController.GetShopModel().GetItemQuantity(_itemData);
-            itemController.SetItemQuantity(quantity);
-
-            if(quantity == 0)
-            {
-                itemControllers.Remove(_itemData);
-                Destroy(itemController.gameObject);
-            }
+            Destroy(itemController.gameObject);
+            items.Remove(_itemData);
         }
+    }
+
+    public void UpdateItemInPanel(ItemScriptableObject _itemData, int _quantity)
+    {
+        if (items.TryGetValue(_itemData, out ItemController itemController))
+        {
+            itemController.SetItemQuantity(_quantity);
+        }
+    }
+
+    public bool HasItemControllerKey(ItemScriptableObject _itemData)
+    {
+        return items.ContainsKey(_itemData);
     }
 
     private void FilterItems(ItemsType? itemType)

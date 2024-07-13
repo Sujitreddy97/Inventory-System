@@ -4,10 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DiscriptionController: MonoBehaviour
+public class DiscriptionController: GenericMonoSingleton<DiscriptionController>
 {
-    public static DiscriptionController Instance { get; private set; }
-
     [SerializeField] private GameObject descriptionPanel;
     [SerializeField] private GameObject onWeightFullPanel;
     [SerializeField] private GameObject onCoinsNotAvailablePanel;
@@ -38,21 +36,6 @@ public class DiscriptionController: MonoBehaviour
         EventService.Instance.OnWeightFullEvent.RemoveListener(OnInventoryWeightFull);
     }
 
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            HideDescription();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-
     private void Start()
     {
         quantityIncreaseButton.onClick.AddListener(IncreaseQuantity);
@@ -69,7 +52,7 @@ public class DiscriptionController: MonoBehaviour
             return;
         }
 
-        descriptionPanel.SetActive(true);
+        ShowDiscriptionPanel();
 
         this.currentItem = _itemData;
         this.itemImage.sprite = _itemImage;
@@ -85,6 +68,10 @@ public class DiscriptionController: MonoBehaviour
         ToggleSellAndBuyButtons(_fromInventory);
     }
 
+    public void ShowDiscriptionPanel()
+    {
+        descriptionPanel.SetActive(true);
+    }
 
     private void IncreaseQuantity()
     {

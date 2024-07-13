@@ -16,19 +16,31 @@ public class InventoryController
 
     public void AddItems(ItemScriptableObject _itemData, int _quantity)
     {
-        inventoryModel.AddItem(_itemData, _quantity);
-        inventoryView.AddItemToPanel(_itemData);
+        int totalWeightToAdd = _itemData.weight * _quantity;
+
+        if (inventoryModel.CanAddItem(totalWeightToAdd))
+        {
+            inventoryModel.AddItem(_itemData, _quantity, totalWeightToAdd);
+            AddItemToInventoryView(_itemData);
+            EventService.Instance.OnAddItemEvent.InvokeEvent();
+        }
+        else
+        {
+            EventService.Instance.OnWeightFullEvent.InvokeEvent();
+            return;
+        }
     }
 
     public void RemoveSelectedItem(ItemScriptableObject _itemData, int _quantity)
     {
         inventoryModel.RemoveItem(_itemData, _quantity);
-        inventoryView.RemoveItemFromPanel(_itemData);
+        RemoveItemFromInventoryView(_itemData);
+        EventService.Instance.OnRemoveItemEvent.InvokeEvent();
     }
 
-    public InventoryModel GetInventoryModel()
+    public int GetItemQuantity(ItemScriptableObject itemData)
     {
-        return inventoryModel;
+        return inventoryModel.GetItemQuantity(itemData);
     }
 
     public int GetCurrentWeight()
@@ -36,7 +48,7 @@ public class InventoryController
         return inventoryModel.GetCurrentWeight();
     }
 
-    public int GetMaxWeight()
+    private int GetMaxWeight()
     {
         return inventoryModel.GetMaxWeight();
     }
@@ -60,5 +72,25 @@ public class InventoryController
     {
         inventoryModel.SubtractCoins(amount);
         inventoryView.UpdateCoinsDisplay();
+    }
+
+    private void AddItemToInventoryView(ItemScriptableObject _itemData)
+    {
+        int quantity = GetItemQuantity(_itemData);
+
+        if (quantity > 0 && inventoryView.HasItemControllerKey(_itemData))
+        {
+            inventoryView.UpdateItemInPanel(_itemData, quantity);
+        }
+        else
+        {
+            inventoryView.AddItemToPanel(_itemData, quantity);
+        }
+
+    }
+
+    private void RemoveItemFromInventoryView(ItemScriptableObject _itemData)
+    {
+        inventoryView.RemoveItemFromPanel(_itemData);
     }
 }
